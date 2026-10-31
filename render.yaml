@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: marketspace
+    runtime: python
+    plan: free
+    buildCommand: ""
+    startCommand: "python marketspace_backend.py"
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.4"
+      - key: MARKETSPACE_ADMIN_KEY
+        generateValue: true

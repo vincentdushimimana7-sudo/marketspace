@@ -18,7 +18,7 @@ from urllib.parse import urlparse
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(PROJECT_ROOT, "marketspace.db")
 ADMIN_KEY = os.environ.get("MARKETSPACE_ADMIN_KEY", "ms_enterprise_2026")
-PORT = int(os.environ.get("MARKETSPACE_PORT", "8080"))
+PORT = int(os.environ.get("PORT", "8080"))
 
 DEFAULT_CATALOG = [
     { "name": "QuantumPro Titanium Laptop", "category": "electronics", "basePriceUSD": 2499.00, "specs": "16-Inch OLED, M4 Ultra Equivalent Chip, 64GB RAM, 2TB SSD", "image": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&auto=format&fit=crop&q=80" },
