@@ -84,6 +84,16 @@ class MarketSpaceHandler(SimpleHTTPRequestHandler):
             ).fetchall()
             conn.close()
             return self._send_json(200, [dict(r) for r in rows])
+        if parsed.path in ("/", "/index.html", "/market%20space.html"):
+            file_path = os.path.join(PROJECT_ROOT, "market space.html")
+            with open(file_path, "rb") as f:
+                content = f.read()
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(content)))
+            self.end_headers()
+            self.wfile.write(content)
+            return
         if parsed.path == "/":
             self.send_response(302)
             self.send_header("Location", "/market%20space.html")
