@@ -214,6 +214,10 @@
             <textarea id="admin-p-specs" required rows="2" placeholder="Item specs..." class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500"></textarea>
           </div>
           <div>
+            <label class="block text-xs text-slate-400 mb-1 font-semibold">Description (Optional)</label>
+            <textarea id="admin-p-desc" rows="2" placeholder="Item description for customers..." class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500"></textarea>
+          </div>
+          <div>
             <label class="block text-xs text-slate-400 mb-1 font-semibold">Image URL (Optional)</label>
             <input type="url" id="admin-p-image" placeholder="https://images.unsplash.com/..." class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
           </div>
@@ -449,6 +453,7 @@
               <span class="text-[10px] uppercase font-extrabold tracking-widest text-cyan-400">${item.category}</span>
               <h4 class="font-bold text-white text-base leading-tight">${item.name}</h4>
               <p class="text-xs text-slate-400 line-clamp-2 pt-1 font-medium leading-relaxed">${item.specs}</p>
+              ${item.description ? `<p class="text-xs text-slate-400/80 line-clamp-2 pt-0.5 font-medium leading-relaxed">${item.description}</p>` : ''}
             </div>
             <div class="space-y-3 pt-2">
               <div class="text-lg font-black text-white">${priceLabel}</div>
@@ -489,6 +494,7 @@
       const category = document.getElementById('admin-p-category').value;
       const basePriceUSD = parseFloat(document.getElementById('admin-p-price').value);
       const specs = document.getElementById('admin-p-specs').value.trim();
+      const description = document.getElementById('admin-p-desc').value.trim();
       let image = document.getElementById('admin-p-image').value.trim();
 
       const keyInput = document.getElementById('admin-p-key');
@@ -503,7 +509,7 @@
       fetch('/api/products', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-Admin-Key': key },
-        body: JSON.stringify({ name, category, basePriceUSD, specs, image: image })
+        body: JSON.stringify({ name, category, basePriceUSD, specs, image: image, description }),
       })
         .then(res => { if (!res.ok) throw new Error('API status ' + res.status); return res.json(); })
         .then(() => { e.target.reset(); alert("Product added successfully and synced live to showroom!"); initAPI(); })

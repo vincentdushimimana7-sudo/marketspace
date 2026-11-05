@@ -45,10 +45,14 @@ def init_db():
             basePriceUSD REAL NOT NULL,
             specs TEXT NOT NULL,
             image TEXT,
+            description TEXT DEFAULT '',
             created_at TEXT DEFAULT CURRENT_TIMESTAMP
         )
         """
     )
+    cols = [r[1] for r in conn.execute("PRAGMA table_info(products)").fetchall()]
+    if "description" not in cols:
+        conn.execute("ALTER TABLE products ADD COLUMN description TEXT DEFAULT ''")
     conn.commit()
     count = conn.execute("SELECT COUNT(*) FROM products").fetchone()[0]
     if count == 0:
@@ -80,7 +84,7 @@ class MarketSpaceHandler(SimpleHTTPRequestHandler):
         if parsed.path == "/api/products":
             conn = get_db()
             rows = conn.execute(
-                "SELECT id, name, category, basePriceUSD, specs, image FROM products ORDER BY id"
+                "SELECT id, name, category, basePriceUSD, specs, image, description FROM products ORDER BY id"
             ).fetchall()
             conn.close()
             return self._send_json(200, [dict(r) for r in rows])
@@ -118,8 +122,8 @@ class MarketSpaceHandler(SimpleHTTPRequestHandler):
                 return self._send_json(400, {"error": "Product name is required"})
             conn = get_db()
             cur = conn.execute(
-                "INSERT INTO products (name, category, basePriceUSD, specs, image) VALUES (?,?,?,?,?)",
-                (name, category, base_price, specs, image or "https://images.unsplash.com/photo-1526738549149-8e07eca6c147?w=600&auto=format&fit=crop&q=80"),
+                "INSERT INTO products (name, category, basePriceUSD, specs, image, description) VALUES (?,?,?,?,?,?)",
+                (name, category, base_price, specs, image or "https://images.unsplash.com/photo-1526738549149-8e07eca6c147?w=600&auto=format&fit=crop&q=80", description or ""),
             )
             conn.commit()
             new_id = cur.lastrowid
