@@ -4,6 +4,9 @@ WORKDIR /app
 
 COPY marketspace_backend.py .
 COPY marketspace.html .
+COPY robots.txt .
+COPY sitemap.xml .
+COPY marketspace_logo.svg .
 
 EXPOSE 8080
 
